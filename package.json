@@ -1,0 +1,33 @@
+{
+  "name": "sia",
+  "version": "0.0.1",
+  "description": "doc generator for AngularJS modules",
+  "author": "Bound State Software <info@boundstatesoftware.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/boundstate/sia.git"
+  },
+  "main": "src/index.js",
+  "keywords": ["dgeni", "angularjs", "ngdoc", "documentation", "gulp"],
+  "bugs": "https://github.com/boundstate/sia/issues",
+  "dependencies": {
+    "canonical-path": "0.0.2",
+    "css-prefix": "0.0.2",
+    "del": "^2.0.2",
+    "dgeni": "^0.4.1",
+    "dgeni-packages": "^0.10.19",
+    "gulp-concat": "^2.6.0",
+    "gulp-if": "^1.2.5",
+    "gulp-ng-constant": "^1.1.0",
+    "gulp-ng-html2js": "^0.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-template": "^3.0.0",
+    "gulp-uglify": "^1.4.1",
+    "gulp-util": "^3.0.6",
+    "lodash": "^3.10.1",
+    "q": "^1.4.1",
+    "run-sequence": "^1.1.4",
+    "through2": "^2.0.0"
+  }
+}

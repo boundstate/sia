@@ -1,0 +1,136 @@
+<!doctype html>
+<html ng-app="docsApp" ng-controller="DocsCtrl" lang="en" ng-strict-di>
+<head>
+<title ng-bind="CONFIG.moduleTitle + ' - ' + menu.currentSection.name +
+    (menu.currentSection === menu.currentPage ? '' : ' > ' + menu.currentPage.name)">
+  {{ CONFIG.moduleTitle }}
+</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+<meta name="viewport" content="initial-scale=1" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.css">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body layout="row" ng-cloak>
+
+  <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
+              md-component-id="left"
+              md-is-locked-open="$mdMedia('gt-sm')">
+
+    <header class="docs-menu-header">
+      <a ng-href="#/">
+        <h1 class="md-heading docs-menu-title">{{ CONFIG.moduleTitle }}</h1>
+      </a>
+    </header>
+
+    <md-content flex role="navigation">
+      <ul class="docs-menu">
+        <li ng-repeat="section in menu.sections" class="parent-list-item {{section.className || ''}}" ng-class="{'parentActive' : isSectionSelected(section)}">
+          <h2 class="menu-heading md-subhead" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
+            {{section.name}}
+          </h2>
+          <menu-link section="section" ng-if="section.type === 'link'"></menu-link>
+
+          <menu-toggle section="section" ng-if="section.type === 'toggle'"></menu-toggle>
+
+          <ul ng-if="section.children" class="menu-nested-list">
+            <li ng-repeat="child in section.children" ng-class="{'childActive' : isSectionSelected(child)}">
+              <menu-link section="child" ng-if="child.type === 'link'"></menu-link>
+
+              <menu-toggle section="child" ng-if="child.type === 'toggle'"></menu-toggle>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </md-content>
+  </md-sidenav>
+
+  <div layout="column" tabIndex="-1" role="main" flex>
+    <md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar">
+
+      <div class="md-toolbar-tools docs-toolbar-tools" ng-click="openMenu()" tabIndex="-1">
+        <md-button class="md-icon-button" hide-gt-sm aria-label="Toggle Menu">
+          <md-icon>menu</md-icon>
+        </md-button>
+        <div layout="row" flex class="fill-height">
+          <h2 class="md-toolbar-item md-breadcrumb md-headline">
+            <span ng-if="menu.currentPage.name !== menu.currentSection.name">
+              <span hide-sm hide-md>{{menu.currentSection.name}}</span>
+              <span class="docs-menu-separator-icon" hide-sm hide-md style="transform:translateY(-1px)">
+                <md-icon>chevron_right</md-icon>
+              </span>
+            </span>
+            <span class="md-breadcrumb-page">{{menu.currentPage | humanizeDoc}}</span>
+          </h2>
+
+          <span flex></span> <!-- use up the empty space -->
+
+          <div class="md-toolbar-item docs-tools" layout="row">
+            <md-select
+                ng-if="currentComponent.docs.length"
+                ng-class="{ hide: path().indexOf('demo') == -1 }"
+                ng-model="relatedPage"
+                placeholder="API Reference"
+                class="md-body-1">
+              <md-optgroup label="Directives" ng-if="(currentComponent.docs | filter: { type: 'directive' }).length">
+                <md-option
+                    ng-repeat="doc in currentComponent.docs | filter: { type: 'directive' }"
+                    ng-value="doc.url"
+                    ng-click="redirectToUrl(doc.url)"
+                    aria-label="{{ doc | humanizeDoc }}">
+                  {{doc | humanizeDoc | directiveBrackets}}
+                </md-option>
+              </md-optgroup>
+              <md-optgroup label="Services" ng-if="(currentComponent.docs | filter: { type: 'service' }).length">
+                <md-option
+                    ng-repeat="doc in currentComponent.docs | filter: { type: 'service' }"
+                    ng-value="doc.url"
+                    ng-click="redirectToUrl(doc.url)"
+                    aria-label="{{ doc | humanizeDoc }}">
+                  {{doc | humanizeDoc | directiveBrackets}}
+                </md-option>
+              </md-optgroup>
+            </md-select>
+
+            <md-button
+              class="md-icon-button"
+              aria-label="View Demo"
+              ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
+              ng-href="#/demo/{{currentComponent.name}}">
+              <md-icon>play_circle_filled</md-icon>
+              <md-tooltip>View Demo</md-tooltip>
+            </md-button>
+
+            <md-button
+              aria-label="View Source"
+              class="md-icon-button"
+              ng-class="{hide: !currentDoc}"
+              ng-href="{{currentDoc.repositoryUrl}}"
+              ng-if="currentDoc.repositoryUrl"
+              hide-sm hide-md>
+              <md-icon>code</md-icon>
+              <md-tooltip>View Source</md-tooltip>
+            </md-button>
+          </div>
+        </div>
+      </div>
+
+    </md-toolbar>
+
+    <md-content ng-view md-scroll-y flex layout-padding></md-content>
+
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= ngVersion %>/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= ngVersion %>/angular-animate.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= ngVersion %>/angular-route.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= ngVersion %>/angular-aria.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= ngVersion %>/angular-messages.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.js"></script>
+
+  <script src="docs.js"></script>
+  <script src="docs-demo-scripts.js"></script>
+
+</body>
+</html>
