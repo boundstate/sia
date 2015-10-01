@@ -23,5 +23,35 @@ require('sia')(gulp, {
 });
 ```
 
+```sh
+gulp docs
+```
+
+Components are separated into two categories:
+ 
+#### Core components
+
+Services belonging to the `core` submodule (e.g. `myApp.core`)
+
+#### Other components
+
+Documentation is only generated for other components whose modules are also documented.  For example, if you have a directive 
+belonging to `myApp.components.accordion` you must also add an `ngDoc` for that module:
+
+```js
+/**
+ * @ngdoc module
+ * @name myApp.components.accordion
+ */
+ 
+/**
+ * @ngdoc directive
+ * @name accordion
+ * @module myApp.components.accordion
+ * @description
+ * Accordion
+ */
+ ```
+
 [dgeni]: https://github.com/angular/dgeni
 [Angular Material]: https://material.angularjs.org/
