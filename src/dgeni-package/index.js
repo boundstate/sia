@@ -1,6 +1,5 @@
 var path = require('canonical-path');
 
-var projectPath = path.resolve(__dirname, '../..');
 var packagePath = __dirname;
 
 var Package = require('dgeni').Package;
@@ -21,9 +20,8 @@ module.exports = new Package('angular-md', [
 })
 
 .config(function(readFilesProcessor, writeFilesProcessor) {
-  readFilesProcessor.basePath = projectPath;
   readFilesProcessor.sourceFiles = [
-    {include: 'src/**/*.js', basePath: '.'},
+    {include: 'src/**/*.js', basePath: 'src'},
     {include: 'docs/**/*', basePath: 'docs', fileReader: 'ngdocFileReader'},
   ];
   writeFilesProcessor.outputFolder = 'dist/docs';

@@ -14,6 +14,7 @@ var gulp = require('gulp');
 var pkg = require('./package.json');
 
 require('sia')(gulp, {
+  basePath: __dirname,
   moduleTitle: 'My App',
   modulePrefix: 'myApp',
   version: pkg.version,

@@ -37,6 +37,9 @@ module.exports = function (gulp, config) {
   // Parses ngDocs
   gulp.task('docs:dgeni', function() {
     var dgeniPackage = require('./dgeni-package')
+      .config(function(readFilesProcessor) {
+        readFilesProcessor.basePath = config.basePath;
+      })
       .config(function (componentsDataProcessor) {
         componentsDataProcessor.modulePrefix = config.modulePrefix;
         componentsDataProcessor.repositoryUrl = config.repositoryUrl;
