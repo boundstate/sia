@@ -1,1 +1,1 @@
-DocsApp.constant('{$ doc.name $}', {$ doc.data | json $});
+angular.module('{$ doc.module $}', []).constant('{$ doc.name $}', {$ doc.data | json $});

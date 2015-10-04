@@ -9,8 +9,8 @@ module.exports = new Package('angular-md', [
   require('dgeni-packages/nunjucks')
 ])
 
-.processor(require('./processors/components-data'))
-.processor(require('./processors/content-data'))
+.processor(require('./processors/component-data'))
+.processor(require('./processors/page-data'))
 
 .config(function(log, templateEngine, templateFinder) {
   templateFinder.templateFolders = [

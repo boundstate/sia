@@ -5,6 +5,7 @@ var runSequence = require('run-sequence');
 
 var concat = require('gulp-concat');
 var gulpif = require('gulp-if');
+var ngAnnotate = require('gulp-ng-annotate');
 var ngConstant = require('gulp-ng-constant');
 var ngHtml2js = require('gulp-ng-html2js');
 var rename = require('gulp-rename');
@@ -61,7 +62,7 @@ module.exports = function (gulp, config) {
   // Generates AngularJS config constants
   gulp.task('docs:config', function () {
     return ngConstant({
-      name: 'docsApp.config',
+      name: 'docsApp.config-data',
       constants: {CONFIG: config},
       stream: true
     })
@@ -72,6 +73,7 @@ module.exports = function (gulp, config) {
   // Concatenates and uglifies JS
   gulp.task('docs:js', ['docs:app', 'docs:config', 'docs:html2js', 'docs:dgeni'], function() {
     return gulp.src('dist/docs/js/**/*.js')
+      .pipe(ngAnnotate())
       .pipe(concat('docs.js'))
       .pipe(gulpif(!config.dev, uglify()))
       .pipe(gulp.dest('dist/docs'));
@@ -79,22 +81,19 @@ module.exports = function (gulp, config) {
 
   // Concatenates CSS
   gulp.task('docs:css', ['docs:app'], function() {
-    return gulp.src([
-      appDir + '/css/highlightjs-material.css',
-      appDir + '/css/style.css'
-    ])
+    return gulp.src(appDir + '/css/**/*.css')
       .pipe(concat('docs.css'))
       .pipe(gulp.dest('dist/docs'));
   });
 
   // Converts HTML to JS
   gulp.task('docs:html2js', function() {
-    return gulp.src(appDir + '/**/*.tmpl.html')
+    return gulp.src(appDir + '/partials/**/*.html')
       .pipe(ngHtml2js({
-        moduleName: 'docsApp',
-        declareModule: false
+        moduleName: 'docsApp.templates',
+        prefix: 'partials/'
       }))
-      .pipe(concat('docs-templates.js'))
+      .pipe(concat('templates.js'))
       .pipe(gulp.dest('dist/docs/js'));
   });
 
@@ -109,7 +108,8 @@ module.exports = function (gulp, config) {
   gulp.task('docs:demos', function() {
     return gulp.src('src/**/demo*/**/*')
       .pipe(util.parseDemoFiles(config.modulePrefix))
-      .pipe(ngConstant({name: 'docsApp.demos'}))
+      .pipe(ngConstant({name: 'docsApp.demo-data'}))
+      .pipe(rename('demo-data.js'))
       .pipe(gulp.dest('dist/docs/js'));
   });
 

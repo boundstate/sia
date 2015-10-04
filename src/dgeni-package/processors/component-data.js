@@ -56,16 +56,18 @@ module.exports = function componentsDataProcessor() {
       .value();
 
     docs.push({
+      module: 'docsApp.service-data',
       name: 'SERVICES',
       template: 'constant-data.template.js',
-      outputPath: 'js/services-data.js',
+      outputPath: 'js/service-data.js',
       data: coreServices
     });
 
     docs.push({
+      module: 'docsApp.component-data',
       name: 'COMPONENTS',
       template: 'constant-data.template.js',
-      outputPath: 'js/components-data.js',
+      outputPath: 'js/component-data.js',
       data: components
     });
 

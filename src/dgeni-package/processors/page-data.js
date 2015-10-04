@@ -1,11 +1,11 @@
 var _ = require('lodash');
 
 /**
- * dgProcessor contentDataProcessor
+ * dgProcessor pageDataProcessor
  * @description
  * Generates `PAGES` constant for comments with a `docType` of "content".
  */
-module.exports = function contentDataProcessor() {
+module.exports = function pageDataProcessor() {
   return {
     $runAfter: ['paths-computed'],
     $runBefore: ['rendering-docs'],
@@ -27,9 +27,10 @@ module.exports = function contentDataProcessor() {
       value();
 
     docs.push({
+      module: 'docsApp.page-data',
       name: 'PAGES',
       template: 'constant-data.template.js',
-      outputPath: 'js/content-data.js',
+      outputPath: 'js/page-data.js',
       data: contentDocs
     });
   }
