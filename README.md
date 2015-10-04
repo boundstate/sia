@@ -27,11 +27,24 @@ require('sia')(gulp, {
 gulp docs
 ```
 
-Components are separated into two categories:
+#### Content
+
+Markdown files in the `docs` folder that have `@ngdoc content` are included in the generated docs. Create the
+documentation homepage at `docs/index.md`:
+
+```html
+<!-- docs/index.md -->
+@ngdoc content
+@name Introduction
+@description
+...
+```
+
+Markdown files with `@area nav` will be displayed in the navigation bar.
  
 #### Core components
 
-Services belonging to the `core` submodule (e.g. `myApp.core`)
+Services belonging to the `core` submodule (e.g. `myApp.core`) are displayed in the _Core_ section of the docs.
 
 #### Other components
 

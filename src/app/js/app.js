@@ -47,14 +47,13 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider)
     .primaryPalette('docs-blue')
     .accentPalette('docs-red');
 
-  angular.forEach(PAGES, function(pages, area) {
-    angular.forEach(pages, function(page) {
-      $routeProvider
-        .when(page.url, {
-          templateUrl: page.outputPath,
-          controller: 'GuideCtrl'
-        });
-    });
+  angular.forEach(PAGES, function(page) {
+    page.url = '/' + page.url;
+    $routeProvider
+      .when(page.url, {
+        templateUrl: page.outputPath,
+        controller: 'GuideCtrl'
+      });
   });
 
   angular.forEach(COMPONENTS, function(component) {
@@ -100,8 +99,6 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider)
       }
     });
   });
-
-  $routeProvider.otherwise(PAGES.main[0].url);
 }])
 
 .factory('menu', [
@@ -118,12 +115,14 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   var version = {};
   var sections = [];
 
-  angular.forEach(PAGES.main, function(page) {
-    sections.push({
-      name: page.label,
-      url: page.url,
-      type: 'link'
-    });
+  angular.forEach(PAGES, function(page) {
+    if (page.area == 'nav') {
+      sections.push({
+        name: page.label,
+        url: page.url,
+        type: 'link'
+      });
+    }
   });
 
   var demoDocs = [];
@@ -282,29 +281,15 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
     }
   };
 
-  function sortByHumanName(a,b) {
-    return (a.humanName < b.humanName) ? -1 :
-      (a.humanName > b.humanName) ? 1 : 0;
-  }
-
   function onLocationChange() {
     var path = $location.path();
-    var introLink = {
-      name: "Introduction",
-      url:  "/",
-      type: "link"
-    };
-
-    if (path == '/') {
-      self.selectSection(introLink);
-      self.selectPage(introLink, introLink);
-      return;
-    }
+    var matchedPage = false;
 
     var matchPage = function(section, page) {
       if (path === page.url) {
         self.selectSection(section);
         self.selectPage(section, page);
+        matchedPage = true;
       }
     };
 
@@ -330,6 +315,12 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         matchPage(section, section);
       }
     });
+
+    if (!matchedPage) {
+      PAGES.forEach(function(page) {
+        matchPage(page, page);
+      });
+    }
   }
 }])
 
@@ -417,7 +408,6 @@ function($scope, COMPONENTS, CONFIG, $mdSidenav, $timeout, $mdDialog, menu, $loc
   $scope.menu = menu;
 
   $scope.path = path;
-  $scope.goHome = goHome;
   $scope.openMenu = openMenu;
   $scope.closeMenu = closeMenu;
   $scope.isSectionSelected = isSectionSelected;
@@ -457,11 +447,6 @@ function($scope, COMPONENTS, CONFIG, $mdSidenav, $timeout, $mdDialog, menu, $loc
     return $location.path();
   }
 
-  function goHome($event) {
-    menu.selectPage(null, null);
-    $location.path( '/' );
-  }
-
   function openPage() {
     $scope.closeMenu();
   }
@@ -494,14 +479,6 @@ function($scope, COMPONENTS, CONFIG, $mdSidenav, $timeout, $mdDialog, menu, $loc
     menu.toggleSelectSection(section);
   }
 }])
-
-.controller('HomeCtrl', [
-  '$scope',
-  '$rootScope',
-function($scope, $rootScope) {
-  $rootScope.currentComponent = $rootScope.currentDoc = null;
-}])
-
 
 .controller('GuideCtrl', [
   '$rootScope',

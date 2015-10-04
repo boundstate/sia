@@ -15,16 +15,14 @@ module.exports = function contentDataProcessor() {
   function process(docs) {
     var contentDocs = _(docs)
       .filter({docType: 'content'})
-      .groupBy('area')
-      .mapValues(function(areaDocs) {
-        return _.map(areaDocs, function(areaDoc) {
-          return {
-            name: areaDoc.name,
-            outputPath: areaDoc.outputPath,
-            url: '/' + areaDoc.path,
-            label: areaDoc.label || areaDoc.name
-          };
-        });
+      .map(function(doc) {
+        return {
+          name: doc.name,
+          area: doc.area,
+          outputPath: doc.outputPath,
+          url: doc.path == 'index' ? '' : doc.path,
+          label: doc.label || doc.name
+        };
       }).
       value();
 
