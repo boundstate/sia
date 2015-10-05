@@ -21,7 +21,7 @@
               <md-icon>code</md-icon>
           </md-button>
           <md-button
-              ng-hide="{{exampleNotEditable}}"
+              ng-hide="{{!CONFIG.codepen}}"
               hide-sm
               ng-click="demoCtrl.editOnCodepen()"
               aria-label="Edit on CodePen"

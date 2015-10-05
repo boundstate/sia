@@ -50,7 +50,7 @@ function parseDemoFiles(modulePrefix) {
       module = {
         name: moduleName,
         label: humanizeCamelCase(componentName),
-        url: '/demo/' + moduleName,
+        url: 'demo/' + moduleName,
         demos: []
       };
       modules.push(module);
@@ -63,7 +63,9 @@ function parseDemoFiles(modulePrefix) {
         id: componentName + demoName,
         label: humanizeCamelCase(demoName.replace(/^demo/, '')),
         ngModule: null,
-        files: {html: [], js: [], css: []}
+        html: [],
+        js: [],
+        css: []
       };
       module.demos.push(demo);
     }
@@ -81,7 +83,7 @@ function parseDemoFiles(modulePrefix) {
       if (fileType == 'js' && !demo.ngModule) {
         demo.ngModule = findModule(file.contents.toString());
       }
-      demo.files[fileType].push(demoFile);
+      demo[fileType].push(demoFile);
     }
 
     cb();

@@ -25,8 +25,8 @@
         js: processJs(files.js),
         css: mergeFiles(files.css).join(' '),
 
-        js_external: CONFIG.codepenExternalJs.join(';'),
-        css_external: CONFIG.codepenExternalCss.join(';')
+        js_external: (CONFIG.codepen.externalJs || []).join(';'),
+        css_external: (CONFIG.codepen.externalCss || []).join(';')
       };
     }
 

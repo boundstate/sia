@@ -29,7 +29,8 @@
     .filter('directiveBrackets', directiveBracketsFilter);
 
   /* @ngInject */
-  function configure(SERVICES, COMPONENTS, DEMOS, PAGES, $routeProvider, $mdThemingProvider) {
+  function configure(SERVICES, COMPONENTS, DEMOS, PAGES, $locationProvider, $routeProvider, $mdThemingProvider) {
+    $locationProvider.html5Mode(true).hashPrefix('!');
     $routeProvider
       .when('/demo/', {
         redirectTo: function () {
@@ -43,16 +44,14 @@
       });
 
     angular.forEach(PAGES, function (page) {
-      page.url = '/' + page.url;
-      $routeProvider.when(page.url, {
+      $routeProvider.when('/' + page.url, {
         templateUrl: page.outputPath,
         controller: 'GuideCtrl'
       });
     });
 
     angular.forEach(SERVICES, function (service) {
-      service.url = '/' + service.url;
-      $routeProvider.when(service.url, {
+      $routeProvider.when('/' + service.url, {
         templateUrl: service.outputPath,
         resolve: {
           component: function () {
@@ -68,8 +67,7 @@
 
     angular.forEach(COMPONENTS, function (component) {
       angular.forEach(component.docs, function (doc) {
-        doc.url = '/' + doc.url;
-        $routeProvider.when(doc.url, {
+        $routeProvider.when('/' + doc.url, {
           templateUrl: doc.outputPath,
           resolve: {
             component: function () {
@@ -92,7 +90,7 @@
         }
       });
       demoComponent = demoComponent || angular.extend({}, componentDemos);
-      $routeProvider.when(componentDemos.url, {
+      $routeProvider.when('/' + componentDemos.url, {
         templateUrl: 'partials/demo.html',
         controller: 'DemoCtrl',
         resolve: {
@@ -134,7 +132,7 @@
   }
 
   /* @ngInject */
-  function menuService(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $window) {
+  function menuService(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
 
     var version = {};
     var sections = [];
@@ -222,81 +220,6 @@
 
     $rootScope.$on('$locationChangeSuccess', onLocationChange);
 
-    $http.get("/docs.json")
-      .success(function (response) {
-        var versionId = getVersionIdFromPath();
-        var head = {type: 'version', url: '/HEAD', id: 'head', name: 'HEAD (master)', github: ''};
-        var commonVersions = versionId === 'head' ? [] : [head];
-        var knownVersions = getAllVersions();
-        var listVersions = knownVersions.filter(removeCurrentVersion);
-        var currentVersion = getCurrentVersion();
-        version.current = currentVersion;
-        sections.unshift({
-          name: 'Documentation Version',
-          type: 'heading',
-          className: 'version-picker',
-          children: [{
-            name: currentVersion.name,
-            type: 'toggle',
-            pages: commonVersions.concat(listVersions)
-          }]
-        });
-        function removeCurrentVersion(version) {
-          switch (versionId) {
-            case version.id:
-              return false;
-            case 'latest':
-              return !version.latest;
-            default:
-              return true;
-          }
-        }
-
-        function getAllVersions() {
-          return response.versions.map(function (version) {
-            var latest = response.latest === version;
-            return {
-              type: 'version',
-              url: '/' + version,
-              name: getVersionFullString({id: version, latest: latest}),
-              id: version,
-              latest: latest,
-              github: 'tree/v' + version
-            };
-          });
-        }
-
-        function getVersionFullString(version) {
-          return version.latest
-            ? 'Latest Release (' + version.id + ')'
-            : 'Release ' + version.id;
-        }
-
-        function getCurrentVersion() {
-          switch (versionId) {
-            case 'head':
-              return head;
-            case 'latest':
-              return knownVersions.filter(getLatest)[0];
-            default:
-              return knownVersions.filter(getVersion)[0];
-          }
-          function getLatest(version) {
-            return version.latest;
-          }
-
-          function getVersion(version) {
-            return versionId === version.id;
-          }
-        }
-
-        function getVersionIdFromPath() {
-          var path = $window.location.pathname;
-          if (path.length < 2) path = 'HEAD';
-          return path.match(/[^\/]+/)[0].toLowerCase();
-        }
-      });
-
     return self = {
       version: version,
       sections: sections,
@@ -325,7 +248,7 @@
       var matchedPage = false;
 
       var matchPage = function (section, page) {
-        if (path === page.url) {
+        if (path === '/' + page.url) {
           self.selectSection(section);
           self.selectPage(section, page);
           matchedPage = true;
@@ -452,7 +375,7 @@
       configurable: true
     });
     $rootScope.redirectToUrl = function (url) {
-      $window.location.hash = url;
+      $location.path(url);
       $timeout(function () {
         $rootScope.relatedPage = null;
       }, 100);

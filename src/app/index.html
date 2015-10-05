@@ -1,15 +1,19 @@
 <!doctype html>
-<html ng-app="docsApp" ng-controller="DocsCtrl" lang="en" ng-strict-di>
+<html ng-app="docsApp" ng-controller="DocsCtrl" lang="en" charset="UTF-8" ng-strict-di>
 <head>
 <title ng-bind="CONFIG.moduleTitle + ' - ' + menu.currentSection.name +
     (menu.currentSection === menu.currentPage ? '' : ' > ' + menu.currentPage.name)">
   {{ CONFIG.moduleTitle }}
 </title>
+<base href="/docs/">
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
 <meta name="viewport" content="initial-scale=1" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.css">
+<% _.each(config.moduleCss, function(css) { %>
+<link rel="stylesheet" href="<%= css %>">
+<% }); %>
 <link rel="stylesheet" href="docs.css">
 </head>
 <body layout="row" ng-cloak>
@@ -19,7 +23,7 @@
               md-is-locked-open="$mdMedia('gt-sm')">
 
     <header class="docs-menu-header">
-      <a ng-href="#/">
+      <a ng-href="">
         <h1 class="md-heading docs-menu-title">{{ CONFIG.moduleTitle }}</h1>
       </a>
     </header>
@@ -97,7 +101,7 @@
               class="md-icon-button"
               aria-label="View Demo"
               ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
-              ng-href="#/demo/{{currentComponent.name}}">
+              ng-href="demo/{{currentComponent.name}}">
               <md-icon>play_circle_filled</md-icon>
               <md-tooltip>View Demo</md-tooltip>
             </md-button>
@@ -123,13 +127,16 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= ngVersion %>/angular.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= ngVersion %>/angular-animate.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= ngVersion %>/angular-route.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= ngVersion %>/angular-aria.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= ngVersion %>/angular-messages.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= config.ngVersion %>/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= config.ngVersion %>/angular-animate.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= config.ngVersion %>/angular-route.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= config.ngVersion %>/angular-aria.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/<%= config.ngVersion %>/angular-messages.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.js"></script>
 
+  <% _.each(config.moduleJs, function(js) { %>
+    <script src="<%= js %>"></script>
+  <% }); %>
   <script src="docs.js"></script>
   <script src="docs-demo-scripts.js"></script>
 

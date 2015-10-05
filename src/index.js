@@ -1,3 +1,4 @@
+var args = require('argv').run();
 var del = require('del');
 var Dgeni = require('dgeni');
 var path = require('path');
@@ -9,6 +10,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var ngConstant = require('gulp-ng-constant');
 var ngHtml2js = require('gulp-ng-html2js');
 var rename = require('gulp-rename');
+var server = require('gulp-webserver');
 var template = require('gulp-template');
 var uglify = require('gulp-uglify');
 
@@ -18,21 +20,20 @@ var appDir = path.join(__dirname, 'app');
 
 module.exports = function (gulp, config) {
 
-  gulp.task('docs:clean', function () {
-    return del('dist/docs');
-  });
-
-  // Generates docs and demos
-  gulp.task('docs', function () {
+  gulp.task('docs', function (cb) {
     runSequence('docs:clean', [
       'docs:index',
       'docs:dgeni',
       'docs:js',
       'docs:css',
-      'docs:demos',
+      'docs:demos:data',
       'docs:demos:copy',
       'docs:demos:scripts'
-    ]);
+    ], cb);
+  });
+
+  gulp.task('docs:clean', function () {
+    return del('dist/docs');
   });
 
   // Parses ngDocs
@@ -100,12 +101,12 @@ module.exports = function (gulp, config) {
   // Compiles index template
   gulp.task('docs:index', function() {
     return gulp.src(appDir + '/index.html')
-      .pipe(template({ngVersion: config.ngVersion}))
+      .pipe(template({config: config}))
       .pipe(gulp.dest('dist/docs'));
   });
 
   // Generates demo data
-  gulp.task('docs:demos', function() {
+  gulp.task('docs:demos:data', function() {
     return gulp.src('src/**/demo*/**/*')
       .pipe(util.parseDemoFiles(config.modulePrefix))
       .pipe(ngConstant({name: 'docsApp.demo-data'}))
@@ -125,6 +126,16 @@ module.exports = function (gulp, config) {
     return gulp.src('dist/docs/demo-partials/**/*.js')
       .pipe(concat('docs-demo-scripts.js'))
       .pipe(gulp.dest('dist/docs'));
+  });
+
+  gulp.task('docs:serve', function() {
+    var port = args.port || 8000;
+    gulp.src('dist')
+      .pipe(server({
+        port: port,
+        fallback: 'docs/index.html',
+        open: 'http://localhost:8000/docs'
+      }));
   });
 
 };
