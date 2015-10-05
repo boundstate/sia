@@ -43,9 +43,8 @@ module.exports = function (gulp, config) {
         log.level = config.dev ? 'info' : 'error';
         readFilesProcessor.basePath = config.basePath;
       })
-      .config(function (componentsDataProcessor) {
-        componentsDataProcessor.modulePrefix = config.modulePrefix;
-        componentsDataProcessor.repositoryUrl = config.repositoryUrl;
+      .config(function (componentDataProcessor) {
+        componentDataProcessor.repositoryUrl = config.repositoryUrl;
       });
     var dgeni = new Dgeni([dgeniPackage]);
     return dgeni.generate();

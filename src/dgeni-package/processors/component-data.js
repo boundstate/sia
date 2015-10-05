@@ -1,19 +1,13 @@
 var _ = require('lodash');
 
 /**
- * dgProcessor componentsDataProcessor
+ * dgProcessor componentDataProcessor
  * @description
- * Generate constants for components:
- *  - `SERVICES`: services part of the core module
- *  - `COMPONENTS`: all other components, grouped by module
+ * Generate `COMPONENTS` constant for components within documented modules
  */
-module.exports = function componentsDataProcessor() {
+module.exports = function componentDataProcessor() {
   return {
-    modulePrefix: null,
     repositoryUrl: null,
-    $validate: {
-      modulePrefix: { presence: true },
-    },
     $runAfter: ['paths-computed'],
     $runBefore: ['rendering-docs'],
     $process: process
@@ -21,15 +15,7 @@ module.exports = function componentsDataProcessor() {
 
   function process(docs) {
 
-    var modulePrefix = this.modulePrefix;
-    var repositoryUrl = this.repositoryUrl;
-
-    var coreServices = _(docs)
-      .filter(function (doc) {
-        return doc.docType == 'service' && doc.module == modulePrefix + '.core';
-      })
-      .map(buildCoreServiceData)
-      .value();
+    var repositoryBaseUrl = this.repositoryUrl && this.repositoryUrl + '/blob/master/src/';
 
     var components = _(docs)
       // We are not interested in docs that are not in a module
@@ -56,14 +42,6 @@ module.exports = function componentsDataProcessor() {
       .value();
 
     docs.push({
-      module: 'docsApp.service-data',
-      name: 'SERVICES',
-      template: 'constant-data.template.js',
-      outputPath: 'js/service-data.js',
-      data: coreServices
-    });
-
-    docs.push({
       module: 'docsApp.component-data',
       name: 'COMPONENTS',
       template: 'constant-data.template.js',
@@ -72,53 +50,20 @@ module.exports = function componentsDataProcessor() {
     });
 
     /**
-     * Build data for core services.
-     * @param {object} doc
-     * @param {object} [extraData]
-     * @returns {*}
-     */
-    function buildCoreServiceData(doc, extraData) {
-      var options = _.assign(extraData || {}, {hasDemo: false});
-      return buildDocData(doc, options, 'core');
-    }
-
-    /**
      * Build data for components.
      * @param {object} doc
-     * @param {object} [extraData]
+     * @param {object} [options]
      * @returns {*}
      */
-    function buildComponentData(doc, extraData) {
-      var options = _.assign(extraData || {}, {hasDemo: (doc.docType === 'directive')});
-      return buildDocData(doc, options, 'components');
-    }
-
-    /**
-     * Build documentation data.
-     * @param {object} doc
-     * @param {object} [extraData]
-     * @param {string} descriptor
-     * @returns {*}
-     */
-    function buildDocData(doc, extraData, descriptor) {
-      var module = modulePrefix + '.' + descriptor;
-      var repositoryBaseUrl = repositoryUrl && repositoryUrl + '/blob/master/src/' + descriptor + '/';
-      doc.module.split(module + '.').pop(); // remove jsName
-
-      var basePathFromProjectRoot = 'src/' + descriptor + '/';
-      var filePath = doc.fileInfo.filePath;
-      var indexOfBasePath = filePath.indexOf(basePathFromProjectRoot);
-      var path = filePath.substr(indexOfBasePath + basePathFromProjectRoot.length, filePath.length);
-
+    function buildComponentData(doc, options) {
       return _.assign({
         name: doc.name,
         type: doc.docType,
         outputPath: doc.outputPath,
         url: doc.path,
-        label: doc.label || doc.name,
-        module: module,
-        repositoryUrl: repositoryBaseUrl && repositoryBaseUrl + path
-      }, extraData);
+        hasDemo: doc.docType === 'directive',
+        repositoryUrl: repositoryBaseUrl && repositoryBaseUrl + doc.fileInfo.relativePath
+      }, options || {});
     }
 
   }

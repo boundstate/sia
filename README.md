@@ -43,14 +43,10 @@ documentation homepage at `docs/index.md`:
 ```
 
 Markdown files with `@area nav` will be displayed in the navigation bar.
- 
-#### Core components
 
-Services belonging to the `core` submodule (e.g. `myApp.core`) are displayed in the _Core_ section of the docs.
+#### Components
 
-#### Other components
-
-Documentation is only generated for other components whose modules are also documented.  For example, if you have a directive 
+Documentation is only generated for components whose modules are also documented.  For example, if you have a directive
 belonging to `myApp.components.accordion` you must also add an `ngDoc` for that module:
 
 ```js

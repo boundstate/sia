@@ -13,8 +13,7 @@
     'docsApp.component-data',
     'docsApp.config-data',
     'docsApp.demo-data',
-    'docsApp.page-data',
-    'docsApp.service-data'
+    'docsApp.page-data'
   ])
     .config(configure)
     .factory('menu', menuService)
@@ -29,7 +28,7 @@
     .filter('directiveBrackets', directiveBracketsFilter);
 
   /* @ngInject */
-  function configure(SERVICES, COMPONENTS, DEMOS, PAGES, $locationProvider, $routeProvider, $mdThemingProvider) {
+  function configure(COMPONENTS, DEMOS, PAGES, $locationProvider, $routeProvider, $mdThemingProvider) {
     $locationProvider.html5Mode(true).hashPrefix('!');
     $routeProvider
       .when('/demo/', {
@@ -50,28 +49,13 @@
       });
     });
 
-    angular.forEach(SERVICES, function (service) {
-      $routeProvider.when('/' + service.url, {
-        templateUrl: service.outputPath,
-        resolve: {
-          component: function () {
-            return undefined;
-          },
-          doc: function () {
-            return service;
-          }
-        },
-        controller: 'ComponentDocCtrl'
-      });
-    });
-
     angular.forEach(COMPONENTS, function (component) {
       angular.forEach(component.docs, function (doc) {
         $routeProvider.when('/' + doc.url, {
           templateUrl: doc.outputPath,
           resolve: {
             component: function () {
-              return component;
+              return component; // undefined for core services?
             },
             doc: function () {
               return doc;
@@ -132,7 +116,7 @@
   }
 
   /* @ngInject */
-  function menuService(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
+  function menuService(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
 
     var version = {};
     var sections = [];
@@ -177,15 +161,6 @@
         docsByModule[doc.module] = docsByModule[doc.module] || [];
         docsByModule[doc.module].push(doc);
       });
-    });
-
-    SERVICES.forEach(function (service) {
-      if (angular.isDefined(service.private)) return;
-      apiDocs[service.type] = apiDocs[service.type] || [];
-      apiDocs[service.type].push(service);
-
-      docsByModule[service.module] = docsByModule[service.module] || [];
-      docsByModule[service.module].push(service);
     });
 
     var apiSections = [];
