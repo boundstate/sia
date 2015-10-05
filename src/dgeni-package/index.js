@@ -12,7 +12,7 @@ module.exports = new Package('angular-md', [
 .processor(require('./processors/component-data'))
 .processor(require('./processors/page-data'))
 
-.config(function(log, templateEngine, templateFinder) {
+.config(function(templateEngine, templateFinder) {
   templateFinder.templateFolders = [
     path.resolve(packagePath, 'templates'),
     path.resolve(packagePath, 'templates/ngdoc')
