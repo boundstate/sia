@@ -15,8 +15,10 @@ var pkg = require('./package.json');
 
 require('sia')(gulp, {
   basePath: __dirname,
-  moduleTitle: 'My App',
-  modulePrefix: 'myApp',
+  moduleTitle: 'My Module',
+  modulePrefix: 'myModule',
+  moduleJs: ['../my-module.js'],
+  moduleCss: ['../my-module.css'],
   version: pkg.version,
   ngVersion: '1.4.6',
   repositoryUrl: pkg.repository && pkg.repository.url.replace(/^git/, 'https').replace(/(\.git)?\/?$/,'')
