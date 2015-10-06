@@ -177,6 +177,14 @@
       });
     }
 
+    if (apiDocs.filter) {
+      apiSections.push({
+        name: 'Filters',
+        pages: apiDocs.filter.sort(sortByName),
+        type: 'toggle'
+      });
+    }
+
     sections.push({
       name: 'API Reference',
       type: 'heading',
