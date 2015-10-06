@@ -18,6 +18,7 @@
   ],
   "bugs": "https://github.com/boundstate/sia/issues",
   "dependencies": {
+    "argv": "0.0.2",
     "canonical-path": "0.0.2",
     "css-prefix": "0.0.2",
     "del": "^2.0.2",
