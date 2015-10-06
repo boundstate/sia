@@ -5,7 +5,7 @@ _sia_ is a documentation generator built on [dgeni] that uses [Angular Material]
 ## Usage
 
 ```sh
-npm install sia
+npm install sia --save-dev
 ```
 
 ```js
@@ -17,21 +17,40 @@ require('sia')(gulp, {
   basePath: __dirname,
   moduleTitle: 'My Module',
   modulePrefix: 'myModule',
+  ngVersion: '1.4.6',
   moduleJs: ['../my-module.js'],
   moduleCss: ['../my-module.css'],
-  version: pkg.version,
-  ngVersion: '1.4.6',
   repositoryUrl: pkg.repository && pkg.repository.url.replace(/^git/, 'https').replace(/(\.git)?\/?$/,'')
 });
 ```
+
+Generate docs:
 
 ```sh
 gulp docs
 ```
 
-#### Content
+Serve docs with local webserver:
 
-Markdown files in the `docs` folder that have `@ngdoc content` are included in the generated docs. Create the
+```sh
+gulp docs:serve
+```
+
+### Options
+
+- **basePath** `string` - Base path where `src` and `docs` folders are located.
+- **moduleTitle** `string` - Title displayed in docs.
+- **modulePrefix** `string` - Module prefix used when determining module ids from folder structure.
+- **ngVersion** `string`  - AngularJS version to load.
+  (*angular*, *angular-animate*, *angular-route*, *angular-aria*, and *angular-messages* are automatically loaded)
+- **moduleJs** `Array` - JavaScript files to load.
+- **moduleCss** `Array` - CSS files to load.
+- repositoryUrl `string` - Repository base URL.
+- debug `boolean` - Debug mode. Default `false`.
+
+### Content
+
+Markdown files in `{basePath}/docs` that have `@ngdoc content` are included in the generated docs. Create the
 documentation homepage at `docs/index.md`:
 
 ```html
@@ -42,12 +61,14 @@ documentation homepage at `docs/index.md`:
 ...
 ```
 
-Markdown files with `@area nav` will be displayed in the navigation bar.
+To display a file in the docs sidenav use `@area nav`.
 
-#### Components
+### Components
 
-Documentation is only generated for components whose modules are also documented.  For example, if you have a directive
-belonging to `myApp.components.accordion` you must also add an `ngDoc` for that module:
+Components in `{basePath}/src}` that have `@ngdoc service`, `@ngdoc directive`, or `@ngdoc filter` are included in the
+docs if they belong to a documented module.
+
+For example:
 
 ```js
 /**
