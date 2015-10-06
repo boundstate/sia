@@ -302,9 +302,6 @@ code:not(.highlight) {
   font-weight: 500;
 }
 
-ul#docs-menu-Directives {
-  margin-bottom: 20px;
-}
 .md-button-toggle .md-toggle-icon {
   display: block;
   margin-left: auto;
@@ -526,45 +523,6 @@ md-toolbar.demo-toolbar .md-button {
 
 }
 
-/***************
- * Landing Page
- ***************/
-ul.buckets {
-  margin: 24px 0 24px -8px;
-  padding: 0;
-  position: relative;
-}
-ul.buckets li {
-  list-style: none;
-  margin: 0;
-  text-align: center;
-}
-ul.buckets li md-card md-card-content {
-  padding: 0;
-}
-ul.buckets li a {
-  display: block;
-  font-weight: 500;
-  padding: 16px 0;
-  text-decoration: none;
-  -webkit-transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
-  background-color: #f6f6f6 !important;
-  box-shadow: none !important;
-  margin-right: 0;
-  margin-top: 0;
-}
-ul.buckets li a,
-ul.buckets li a md-icon {
-  color: #666 !important;
-  transition: all 0.15s cubic-bezier(0.35, 0, 0.25, 1);
-}
-ul.buckets li a:hover,
-ul.buckets li a:focus,
-ul.buckets li a:hover md-icon,
-ul.buckets li a:focus md-icon {
-  color: #106CC8 !important;
-  background-color: #ebebeb !important;
-}
 /************
  * API DOCS
  ************/
@@ -674,19 +632,6 @@ md-content.demo-source-container > hljs > pre > code.highlight {
 .api-section h3 {
   padding-top: 20px;
 }
-.responsive-video {
-  height: 0;
-  overflow: hidden;
-  padding-bottom: 75%;
-  position: relative;
-}
-.responsive-video iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
 
 ul.no-style {
   padding: 0;
@@ -706,14 +651,6 @@ ul.methods > li:first-child > *:first-child {
   display: none !important;
 }
 
-.version-picker {
-  background: #267ED5 !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  margin-bottom: 1px !important;
-}
-.version-picker .menu-toggle-list {
-  background: transparent !important;
-}
 md-icon.block {
   color: #106CC8;
   display: block;
@@ -747,33 +684,6 @@ docs-demo .doc-demo-content {
 }
 .service-desc > p:last-child {
   margin-bottom: 0;
-}
-
-/* ---------------------
-*  Demo Workarounds
-*
-*  Necessary for component demos that append DOM subtrees outside of the demo app.
-*  Because our docs build prepends CSS classes onto custom demo styles provided for developers,
-*  these styles are needed for the docs website.
-*/
-.autocomplete-custom-template li {
-  border-bottom: 1px solid #ccc;
-  height: auto;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  white-space: normal;
-}
-.autocomplete-custom-template li:last-child {
-  border-bottom-width: 0;
-}
-.autocomplete-custom-template .item-title,
-.autocomplete-custom-template .item-metadata {
-  display: block;
-  line-height: 2;
-}
-.autocomplete-custom-template .item-title md-icon {
-  height: 18px;
-  width: 18px;
 }
 
 

@@ -4,7 +4,7 @@ var packagePath = __dirname;
 
 var Package = require('dgeni').Package;
 
-module.exports = new Package('angular-md', [
+module.exports = new Package('sia', [
   require('dgeni-packages/ngdoc'),
   require('dgeni-packages/nunjucks')
 ])
