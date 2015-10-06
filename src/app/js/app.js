@@ -118,7 +118,6 @@
   /* @ngInject */
   function menuService(COMPONENTS, DEMOS, PAGES, $location, $rootScope) {
 
-    var version = {};
     var sections = [];
 
     angular.forEach(PAGES, function (page) {
@@ -200,7 +199,6 @@
     $rootScope.$on('$locationChangeSuccess', onLocationChange);
 
     return self = {
-      version: version,
       sections: sections,
 
       selectSection: function (section) {
