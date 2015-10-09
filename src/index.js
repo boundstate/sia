@@ -88,7 +88,7 @@ module.exports = function (gulp, config) {
   });
 
   // Concatenates and uglifies JS
-  gulp.task('docs:js', false, ['docs:app', 'docs:config', 'docs:html2js', 'docs:dgeni'], function() {
+  gulp.task('docs:js', false, ['docs:app', 'docs:config', 'docs:html2js', 'docs:dgeni', 'docs:demos:data'], function() {
     return gulp.src('dist/docs/js/**/*.js')
       .pipe(ngAnnotate())
       .pipe(concat('docs.js'))
