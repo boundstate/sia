@@ -1,4 +1,4 @@
-var args = require('argv').run();
+var argv = require('yargs').argv;
 var del = require('del');
 var Dgeni = require('dgeni');
 var path = require('path');
@@ -145,13 +145,17 @@ module.exports = function (gulp, config) {
   });
 
   gulp.task('docs:serve', 'Serves docs', function() {
-    var port = args.port || 8000;
+    var port = argv.port || 8000;
     gulp.src('dist')
       .pipe(server({
         port: port,
         fallback: 'docs/index.html',
-        open: 'http://localhost:8000/docs'
+        open: 'http://localhost:' + port + '/docs'
       }));
+  }, {
+    options: {
+      'port=<port>': 'port of the webserver (default is 8000)'
+    }
   });
 
 };

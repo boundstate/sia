@@ -1,6 +1,6 @@
 {
   "name": "sia",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "doc generator for AngularJS modules",
   "author": "Bound State Software <info@boundstatesoftware.com>",
   "license": "MIT",
@@ -18,7 +18,6 @@
   ],
   "bugs": "https://github.com/boundstate/sia/issues",
   "dependencies": {
-    "argv": "0.0.2",
     "canonical-path": "0.0.2",
     "css-prefix": "0.0.2",
     "del": "^2.0.2",
@@ -38,6 +37,7 @@
     "lodash": "^3.10.1",
     "q": "^1.4.1",
     "run-sequence": "^1.1.4",
-    "through2": "^2.0.0"
+    "through2": "^2.0.0",
+    "yargs": "^3.27.0"
   }
 }
