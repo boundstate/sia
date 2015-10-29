@@ -23,8 +23,9 @@ module.exports = function pageDataProcessor() {
           url: doc.path == 'index' ? '' : doc.path,
           label: doc.label || doc.name
         };
-      }).
-      value();
+      })
+      .sortBy('url')
+      .value();
 
     docs.push({
       module: 'docsApp.page-data',
