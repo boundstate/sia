@@ -145,15 +145,18 @@ module.exports = function (gulp, config) {
   });
 
   gulp.task('docs:serve', 'Serves docs', function() {
-    var port = argv.port || 8000;
+    var host = argv.host || 'localhost';
+    var port = argv.port || '8000';
     gulp.src('dist')
       .pipe(server({
+        host: host,
         port: port,
         fallback: 'docs/index.html',
-        open: 'http://localhost:' + port + '/docs'
+        open: 'http://' + host + ':' + port + '/docs'
       }));
   }, {
     options: {
+      'host=<host>': 'hostname of the webserver (default is localhost)',
       'port=<port>': 'port of the webserver (default is 8000)'
     }
   });
